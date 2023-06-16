@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/CocktailScene.unity
+    guid: 5bd5856ca37c4d34babaaa7e3c93494a
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: b446015ff903d5048b9baabd660c2c2c,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6bf6749c34193e14d8ef4fbf9e658572,
+      type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 2f1e70e537b108445b6c91f13e505f60,
+      type: 2}
