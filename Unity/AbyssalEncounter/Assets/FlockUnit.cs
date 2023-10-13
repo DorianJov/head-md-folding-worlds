@@ -188,8 +188,14 @@ public class FlockUnit : MonoBehaviour
 		moveVector = Vector3.SmoothDamp(myTransform.forward, moveVector, ref currentVelocity, smoothDamp);
 
 		float distance = Vector3.Distance (transform.position, goalPos);
-	
+
+		if(amIFollowingPlayer){
 		moveVector = moveVector.normalized * speed * (distance * assignedFlock.distanceAdditionalSpeed);
+		}else{
+			moveVector = moveVector.normalized * speed;
+		}
+
+		
 
 		if (moveVector == Vector3.zero)
 			moveVector = transform.forward;

@@ -115,6 +115,7 @@ public class Flock : MonoBehaviour
     //int count = -1;
     bool doneChecking = false;
     
+
     
     private void Update()
     {   
@@ -152,9 +153,11 @@ public class Flock : MonoBehaviour
         if(doneChecking){
             timer += Time.deltaTime;
                 if (timer >= interval)
-                {
-                    GenerateUnits();            
+                {   
+                    if(allUnits.Count<=19){
+                    GenerateUnits();           
                     timer -= interval;
+                    }
                 }
        }
 
