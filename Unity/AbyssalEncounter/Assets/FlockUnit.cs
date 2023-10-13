@@ -186,7 +186,11 @@ public class FlockUnit : MonoBehaviour
 
 		var moveVector = cohesionVector + avoidanceVector + aligementVector + boundsVector;
 		moveVector = Vector3.SmoothDamp(myTransform.forward, moveVector, ref currentVelocity, smoothDamp);
-		moveVector = moveVector.normalized * speed;
+
+		float distance = Vector3.Distance (transform.position, goalPos);
+	
+		moveVector = moveVector.normalized * speed * (distance * assignedFlock.distanceAdditionalSpeed);
+
 		if (moveVector == Vector3.zero)
 			moveVector = transform.forward;
 
@@ -227,7 +231,7 @@ public class FlockUnit : MonoBehaviour
 
 	private void CalculateSpeed()
 	{
-	    float distance = Vector3.Distance (this.gameObject.transform.position, goalPos);
+	    //float distance = Vector3.Distance (this.gameObject.transform.position, goalPos);
 		
 		//distance = distance;
 		if (cohesionNeighbours.Count == 0)
@@ -238,7 +242,8 @@ public class FlockUnit : MonoBehaviour
 			speed += cohesionNeighbours[i].speed;
 		}
 
-		speed /= cohesionNeighbours.Count + distance ;
+		speed /= cohesionNeighbours.Count;// + distance ;
+		
 		//speed = Mathf.Clamp(speed, assignedFlock.minSpeed, assignedFlock.maxSpeed);
 		///speed = Mathf.Clamp(speed, assignedFlock.minSpeed, assignedFlock.maxSpeed);
 		speed = Mathf.Clamp(speed, assignedFlock.minSpeed, assignedFlock.maxSpeed);

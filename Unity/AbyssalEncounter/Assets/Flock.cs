@@ -21,6 +21,8 @@ public class Flock : MonoBehaviour
     [SerializeField] private float _maxSpeed;
     public float maxSpeed { get { return _maxSpeed; } }
 
+    public float distanceAdditionalSpeed = 0.1f;
+
     [Header("Target")]
     public GameObject ObjectToFollow;
 

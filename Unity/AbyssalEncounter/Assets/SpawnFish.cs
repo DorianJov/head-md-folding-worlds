@@ -12,7 +12,7 @@ public class SpawnFish : MonoBehaviour
 
     ///FIND MY BOOLEAN MANAGER
 
-    
+    Flock flock;
 
     void Start()
         
@@ -29,6 +29,7 @@ public class SpawnFish : MonoBehaviour
         );
         Instantiate(objectToSpawn, randomPosition, Quaternion.identity);
         */
+        flock = GameObject.FindGameObjectWithTag("Flock").GetComponent<Flock>();
 
     }
 
@@ -40,7 +41,7 @@ public class SpawnFish : MonoBehaviour
 
         
         
-        
+        if(flock.howManyAreFollowing>=20){
 
       
          timer += Time.deltaTime;
@@ -51,7 +52,7 @@ public class SpawnFish : MonoBehaviour
 
         }
       
-
+    }
       
 
     }
