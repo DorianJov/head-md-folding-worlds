@@ -85,7 +85,7 @@ public class FlockUnit : MonoBehaviour
 				touched = true;
 				amIFollowingPlayer = true;
 				glowingShrimp = true;
-               
+               this.gameObject.tag ="Shrimps";
 				
 			
 

@@ -155,7 +155,7 @@ public class Flock : MonoBehaviour
             timer += Time.deltaTime;
                 if (timer >= interval)
                 {   
-                    if(allUnits.Count<=19){
+                    if(allUnits.Count<=22){
                     GenerateUnits();           
                     timer -= interval;
                     }

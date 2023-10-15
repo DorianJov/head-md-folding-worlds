@@ -46,7 +46,8 @@ public class to_origin : MonoBehaviour
     {
         //Debug.Log("FromFISHc counter :  " + flock.howManyAreFollowing);
        //TargetToAttack = GameObject.Find("wescouz");
-        TargetToAttack = GameObject.Find("RedLight");
+        //TargetToAttack = GameObject.Find("RedLight");
+         TargetToAttack = GameObject.FindGameObjectWithTag("Shrimps");
         
         //Debug.Log(TargetToAttack.transform.position);
         //transform.position = new Vector3(0, 0, 2) * Time.deltaTime;
@@ -168,13 +169,28 @@ public class to_origin : MonoBehaviour
 
     void RotateTowards(Vector3 target)
     {
+          float distance = Vector3.Distance (transform.position, TargetToAttack.transform.position);
 
-        if (hasLookedOnce == false)
+        if (hasLookedOnce == false & distance>=1)
         {
             targetRotation = Quaternion.LookRotation(TargetToAttack.transform.position - transform.position);
-            hasLookedOnce = true;
-        }
 
+           // if (timeRemaining+5 > 0)
+		    //{
+		    
+           // timeRemaining -= Time.deltaTime;
+		    //}else{
+              ///  hasLookedOnce = true;
+                //RunAway();
+                ///lookTowardsTarget = false;
+            }else{
+                hasLookedOnce = true;
+                lookbackwardsAndRun = true;
+                lookTowardsTarget = false;
+        }
+    
+            
+        
 
         lerpPercent = Mathf.MoveTowards(lerpPercent, 4f, Time.deltaTime * lerpSpeed);     
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lerpPercent);
@@ -189,10 +205,10 @@ public class to_origin : MonoBehaviour
              playdasHasPlayed = true;
             }
             
-            
+            //dash Speed
             transform.position += transform.forward * Time.deltaTime * 3;
             
-            Destroy(this.gameObject, 8.0f);
+            Destroy(this.gameObject, 20.0f);
 
         }
     }
@@ -226,7 +242,7 @@ public class to_origin : MonoBehaviour
 
 	        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation2, 1f * Time.deltaTime);    
             
-            Destroy(this.gameObject, 8.0f);
+            Destroy(this.gameObject, 20.0f);
 
         }
 
