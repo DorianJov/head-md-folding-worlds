@@ -135,7 +135,7 @@ public class FlockUnit : MonoBehaviour
     }
 
     bool hasRead =  false;
-
+	 
 	public void MoveUnit()
 	{   
         //read once
@@ -155,7 +155,9 @@ public class FlockUnit : MonoBehaviour
 		   makeMeGLOWfor();
 
 		}
-
+		if(assignedFlock.allUnits.Count == 2 & !touched){
+			goalPos = Flock.ExperienceStartPoint;
+		}
          
         ///if has touched makes the shrimps follows the users hand
         if(touched){
@@ -178,7 +180,19 @@ public class FlockUnit : MonoBehaviour
 		var cohesionVector = CalculateCohesionVector() * assignedFlock.cohesionWeight;
 		var avoidanceVector = CalculateAvoidanceVector() * assignedFlock.avoidanceWeight;
 		var aligementVector = CalculateAligementVector() * assignedFlock.aligementWeight;
-		var boundsVector = CalculateBoundsVector() * assignedFlock.boundsWeight;
+
+		//if(amIFollowingPlayer){}
+		 //boundsVector = CalculateBoundsVector() * 10;
+		 var boundsForceWhenFollowing = assignedFlock.boundsWeight;
+
+		 if(amIFollowingPlayer){
+			boundsForceWhenFollowing = 10;
+		 }
+		 var boundsVector = CalculateBoundsVector() * boundsForceWhenFollowing;
+		
+
+			
+		
         
         //I NEEED PERFORMANCES
 		//var obstacleVector = CalculateObstacleVector() * assignedFlock.obstacleWeight;
@@ -189,10 +203,13 @@ public class FlockUnit : MonoBehaviour
 		moveVector = Vector3.SmoothDamp(myTransform.forward, moveVector, ref currentVelocity, smoothDamp);
 
 		float distance = Vector3.Distance (transform.position, goalPos);
+		
 
-		if(amIFollowingPlayer){
+		if(amIFollowingPlayer || assignedFlock.allUnits.Count == 2 & !amIFollowingPlayer ){
 		moveVector = moveVector.normalized * speed * (distance * assignedFlock.distanceAdditionalSpeed);
 		}else{
+
+			//Debug.Log("allunits: " + assignedFlock.allUnits.Count);
 			moveVector = moveVector.normalized * speed;
 		}
 
@@ -317,7 +334,7 @@ public class FlockUnit : MonoBehaviour
 		avoidanceVector = avoidanceVector.normalized;
 		return avoidanceVector;
 	}
-
+	
 	private Vector3 CalculateBoundsVector()
 	{
 
