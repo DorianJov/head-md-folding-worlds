@@ -32,7 +32,7 @@ public class Flock : MonoBehaviour
     public static Vector3 goalPos = Vector3.zero;
     public static Vector3 assignedBasicPos = Vector3.zero;
 
-    
+    public static Vector3 ExperienceStartPoint = Vector3.zero;
     
 
     [Header("Detection Distances")]
@@ -115,17 +115,19 @@ public class Flock : MonoBehaviour
     //int count = -1;
     bool doneChecking = false;
     
+
     
     private void Update()
     {   
 
 
         //InsideBooleanManager.Atleast20ShrimpsFollowsPlayer
-        
+
+        //Spawn 2 shrimps
         if(allUnits.Count == 0){
             GenerateUnits();
         }
-        
+        //Wait for player to touch the 2 first shrimps before generating others
         if (!doneChecking) {
             for(int i=0; i < allUnits.Count; i++) {
                 if (allUnits[i].amIFollowingPlayer) {
@@ -136,32 +138,39 @@ public class Flock : MonoBehaviour
             }
         }
 
-        
+        //Calculate how many shrimps the player have
         howManyAreFollowing = 0;
         for(int i=0; i < allUnits.Count; i++) {
             if (allUnits[i].amIFollowingPlayer) {
                  howManyAreFollowing++;
             }
         }
-
-
         //Debug.Log("nb of shrimps following = " + howManyAreFollowing);
-    
-    
 
+        
+    
+    
+        //Player has at least 2 shrimps. the others can spawn until 20 !
         if(doneChecking){
             timer += Time.deltaTime;
                 if (timer >= interval)
-                {
-                    GenerateUnits();            
+                {   
+                    if(allUnits.Count<=19){
+                    GenerateUnits();           
                     timer -= interval;
+                    }
+
+                    if(howManyAreFollowing>=20){
+                    GenerateUnits();           
+                    timer -= interval;
+                    }
                 }
        }
 
         
         goalPos = ObjectToFollow.transform.position;
         
-        
+        ExperienceStartPoint = StartingPoint.transform.position;
         /*for (int i = 0; i < allUnits.Length; i++)
         {
             allUnits[i].MoveUnit();
@@ -213,6 +222,7 @@ public class Flock : MonoBehaviour
         assignedBasicPos = spawnPosition;
         }else{
         assignedBasicPos = StartingPoint.transform.position;
+        spawnPosition = assignedBasicPos;
         }
 
         for (int i = 0; i < 2; i++)
