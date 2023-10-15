@@ -146,6 +146,7 @@ public class FlockUnit : MonoBehaviour
 			}
         //Debug.Log("I AM BORN");
 		//Debug.Log("AM I Playing a sound ?" + playIdleSound);
+		//Debug.Log("AM I Playing a sound ?" + playIdleSound)
         goalPos = Flock.assignedBasicPos;
         hasRead = true;
         }
