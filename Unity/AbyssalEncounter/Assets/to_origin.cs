@@ -48,6 +48,11 @@ public class to_origin : MonoBehaviour
        //TargetToAttack = GameObject.Find("wescouz");
         //TargetToAttack = GameObject.Find("RedLight");
          TargetToAttack = GameObject.FindGameObjectWithTag("Shrimps");
+         
+         if(TargetToAttack==null){
+            TargetToAttack = GameObject.Find("wescouz");
+         }
+         
         
         //Debug.Log(TargetToAttack.transform.position);
         //transform.position = new Vector3(0, 0, 2) * Time.deltaTime;
@@ -62,6 +67,7 @@ public class to_origin : MonoBehaviour
         if (lookbackwardsAndRun == true)
         {
             RotateTowardsBACK(TargetToAttack.transform.position);
+            //RotateTowardsBACK(new Vector3(0, 0, 0));
         }
 
         if(soundEnv){
@@ -168,25 +174,31 @@ public class to_origin : MonoBehaviour
     
 
     void RotateTowards(Vector3 target)
-    {
+    {       
+        Debug.Log("Fish Follow:" + lookTowardsTarget);
+        
           float distance = Vector3.Distance (transform.position, TargetToAttack.transform.position);
 
         if (hasLookedOnce == false & distance>=1)
         {
             targetRotation = Quaternion.LookRotation(TargetToAttack.transform.position - transform.position);
 
-           // if (timeRemaining+5 > 0)
-		    //{
-		    
-           // timeRemaining -= Time.deltaTime;
-		    //}else{
+            
               ///  hasLookedOnce = true;
                 //RunAway();
                 ///lookTowardsTarget = false;
             }else{
                 hasLookedOnce = true;
-                lookbackwardsAndRun = true;
+                if (timeRemaining-4 > 0)
+		    {
+            timeRemaining -= Time.deltaTime;
+		    }else{
                 lookTowardsTarget = false;
+                hasLookedOnce = false;
+                lookbackwardsAndRun = true;
+            }
+                
+                Debug.Log("FishDistance: " + distance);
         }
     
             
@@ -217,6 +229,7 @@ public class to_origin : MonoBehaviour
     Quaternion targetRotation2;
     void RotateTowardsBACK(Vector3 target){
 
+            Debug.Log("Fish Ce CASSE:");
         if (hasLookedOnce == false)
         {   targetRotation2 = Quaternion.LookRotation(-transform.forward, Vector3.up);
             targetRotation = Quaternion.LookRotation(TargetToAttack.transform.position - transform.position);
@@ -236,7 +249,7 @@ public class to_origin : MonoBehaviour
             Lerped = true;
             
             
-            transform.position += transform.forward * Time.deltaTime * 3;
+            transform.position += transform.forward * Time.deltaTime * 2;
 
             
 

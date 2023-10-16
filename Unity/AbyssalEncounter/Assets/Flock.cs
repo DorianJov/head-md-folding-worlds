@@ -182,6 +182,7 @@ public class Flock : MonoBehaviour
         }
     }
 
+    int count;
     private void GenerateUnits()
     {
 
@@ -191,8 +192,8 @@ public class Flock : MonoBehaviour
             return;
         }
 
-        //count++;
-
+        count++;
+        Debug.Log("Counter value:" + count);
         /*allUnits = new FlockUnit[flockSize];
         for (int i = 0; i < flockSize; i++)
         {
@@ -231,10 +232,16 @@ public class Flock : MonoBehaviour
         tempVariable.AssignFlock(this);
         tempVariable.InitializeSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
 
-        if(i==1){
+        /*if(i==1){
             tempVariable.playIdleSound = false;
         }else{
             tempVariable.playIdleSound = true;
+        }*/
+
+         if(count%3 == 0){
+            tempVariable.playIdleSound = true;
+        }else{
+            tempVariable.playIdleSound = false;
         }
 
         allUnits.Add(tempVariable);

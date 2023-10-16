@@ -517,11 +517,11 @@ MonoBehaviour:
   flockUnitPrefab: {fileID: 2141843468489731183, guid: 73c0c631544977e4eb9073f7dfc5a117,
     type: 3}
   flockSize: 150
-  spawnBounds: {x: -1, y: 6, z: 1}
+  spawnBounds: {x: -1, y: 5, z: 1}
   _minSpeed: 0.13
   _maxSpeed: 0.8
   distanceAdditionalSpeed: 7
-  ObjectToFollow: {fileID: 518392138}
+  ObjectToFollow: {fileID: 1522396263}
   StartingPoint: {fileID: 1576960672}
   _cohesionDistance: 1
   _avoidanceDistance: 0.05
@@ -1998,7 +1998,7 @@ MonoBehaviour:
   maxPosition: {x: 100, y: 100, z: 100}
   origin: {x: 0, y: 0, z: 0}
   radius: 0
-  intervale: 45
+  intervale: 20
 --- !u!1 &1051556187
 GameObject:
   m_ObjectHideFlags: 0
@@ -2133,7 +2133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!135 &1143553181
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2205,7 +2205,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1143553180}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 1.86, z: 0.02}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2872,6 +2872,16 @@ PrefabInstance:
     - target: {fileID: 3113582726685623842, guid: 5eccbf4be2c00e94689ee8062e4e7276,
         type: 3}
       propertyPath: m_PokeGestureEnded.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3113582726685623846, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3113582726751902589, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3113582727218462708, guid: 5eccbf4be2c00e94689ee8062e4e7276,
