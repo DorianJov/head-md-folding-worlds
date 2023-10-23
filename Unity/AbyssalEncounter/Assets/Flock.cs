@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +10,8 @@ public class Flock : MonoBehaviour
     [SerializeField] private FlockUnit flockUnitPrefab;
     [SerializeField] private int flockSize;
     [SerializeField] private Vector3 spawnBounds;
-
+    [SerializeField] private Transform spawnOrigin;
+    
     [Header("Speed Setup")]
     [Range(0, 2)]
     [SerializeField] private float _minSpeed;
@@ -217,35 +216,40 @@ public class Flock : MonoBehaviour
         //randomVector = new Vector3(randomVector.x * spawnBounds.x, randomVector.y + 0.2f * spawnBounds.y, randomVector.z * spawnBounds.z);
         randomVector = new Vector3(randomVector.x * spawnBounds.x, randomVector.y + 0.35f * spawnBounds.y, randomVector.z * spawnBounds.z);
         var spawnPosition = transform.position + randomVector;
+
+        // Override of spawn position by Raphael
+        randomVector = GetRandomVectorPosition();
+        spawnPosition = spawnOrigin != null ? spawnOrigin.position + randomVector : transform.position + randomVector;
+        
         var rotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0);
 
         if(doneChecking){
-        assignedBasicPos = spawnPosition;
+            assignedBasicPos = spawnPosition;
         }else{
-        assignedBasicPos = StartingPoint.transform.position;
-        spawnPosition = assignedBasicPos;
+            assignedBasicPos = StartingPoint.transform.position;
+            spawnPosition = assignedBasicPos;
         }
 
         for (int i = 0; i < 2; i++)
-      {
-        FlockUnit tempVariable = Instantiate(flockUnitPrefab, spawnPosition, rotation);
-        tempVariable.AssignFlock(this);
-        tempVariable.InitializeSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
+        {
+            FlockUnit tempVariable = Instantiate(flockUnitPrefab, spawnPosition, rotation);
+            tempVariable.AssignFlock(this);
+            tempVariable.InitializeSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
 
-        /*if(i==1){
-            tempVariable.playIdleSound = false;
-        }else{
-            tempVariable.playIdleSound = true;
-        }*/
+            /*if(i==1){
+                tempVariable.playIdleSound = false;
+            }else{
+                tempVariable.playIdleSound = true;
+            }*/
 
-         if(count%3 == 0){
-            tempVariable.playIdleSound = true;
-        }else{
-            tempVariable.playIdleSound = false;
+             if(count%3 == 0){
+                tempVariable.playIdleSound = true;
+            }else{
+                tempVariable.playIdleSound = false;
+            }
+
+            allUnits.Add(tempVariable);
         }
-
-        allUnits.Add(tempVariable);
-      }
            //assignedBasicPos = StartingPoint.transform.position;
 
         Debug.Log(allUnits.Count);
@@ -268,5 +272,24 @@ public class Flock : MonoBehaviour
 
         */
 
+    }
+    
+    /// <summary>
+    /// Gets a random position vector
+    /// with a full range random rotation in Y
+    /// a defined range rotation in X
+    /// and a random length between 30 and 60cm (~arm length)
+    /// </summary>
+    /// <returns></returns>
+    private Vector3 GetRandomVectorPosition()
+    {
+        var angleY = Random.Range(0f, 360f);
+        var angleX = Random.Range(-45f, 45f);
+        var length = Random.Range(0.45f, 0.7f);
+        
+        var vector = Vector3.forward;
+        var rot = Quaternion.Euler(angleX, angleY, 0f);
+        var randomPosition = rot * vector;  // rotates the direction
+        return randomPosition * length;
     }
 }
