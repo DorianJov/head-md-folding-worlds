@@ -94,7 +94,8 @@ public class to_origin : MonoBehaviour
             transform.position = newPosition;
             if (stopMoving == true)
             {
-                elapsedTime = 100;
+                yield break;
+                //elapsedTime = 100;
 
             }
             elapsedTime += Time.deltaTime;
@@ -116,8 +117,8 @@ public class to_origin : MonoBehaviour
             // Do smth
            // Debug.Log("fish has passed!!!!!");
 
-           if(flock.howManyAreFollowing<=50){
-            PreparesToAttack();
+           if(flock.howManyAreFollowing<=75){
+                PreparesToAttack();
             }else{
                 
                 RunAway();
@@ -132,19 +133,21 @@ public class to_origin : MonoBehaviour
     void RunAway(){
         
          stopMoving = true;
-        lookbackwardsAndRun = true;
         anim.SetFloat("preparesToAttckTransition", 1);
         AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
         sources[0].Stop();
 	    sources[1].Play();
 
+        Invoke("StartRunaway", 4f);
+    }
+
+    void StartRunaway(){
+        lookbackwardsAndRun = true;
     }
 
     
     void PreparesToAttack()
-
     {
-        lookTowardsTarget = true;
         stopMoving = true;
 
         anim.SetFloat("preparesToAttckTransition", 1);
@@ -152,11 +155,13 @@ public class to_origin : MonoBehaviour
         AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
         sources[0].Stop();
 	    sources[1].Play();
-        //soundEnv = true;
-        
+        //soundEnv = true; 
 
-        
-            
+        Invoke("StartAttack", 4f);
+    }
+
+    void StartAttack(){
+        lookTowardsTarget = true;
     }
 
 
@@ -172,14 +177,51 @@ public class to_origin : MonoBehaviour
 
     private Vector3 targetAngles;
     
+    public enum ChargeState {
+        TETE_CHERCHEUSE,
+        ATTACK,
+        FUITE
+    }
+     
+    private ChargeState chargeState;
+    private Vector3 positionDebutAttack;
 
     void RotateTowards(Vector3 target)
     {       
-        Debug.Log("Fish Follow:" + lookTowardsTarget);
+        //Debug.Log("Fish Follow:" + lookTowardsTarget);
         
-          float distance = Vector3.Distance (transform.position, TargetToAttack.transform.position);
+        
 
-        if (hasLookedOnce == false & distance>=1)
+        switch(chargeState){
+            case ChargeState.TETE_CHERCHEUSE:
+                float distance = Vector3.Distance (transform.position, TargetToAttack.transform.position);
+                targetRotation = Quaternion.LookRotation(TargetToAttack.transform.position - transform.position);
+                if (distance <= 2) {
+                    chargeState = ChargeState.ATTACK;
+                    positionDebutAttack = transform.position;
+                }
+            break;
+            case ChargeState.ATTACK:
+                float distanceParcourue = Vector3.Distance (transform.position, positionDebutAttack);
+                if (distanceParcourue >= 2.9f) {
+                    chargeState = ChargeState.FUITE;
+                    targetRotation = Quaternion.LookRotation(transform.right, Vector3.up);
+                    Destroy(gameObject, 10f);
+                }
+            break;
+            case ChargeState.FUITE:
+                
+            break;
+            default:
+            break;
+        }
+
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+        transform.position += transform.forward * Time.deltaTime * 3;
+/*
+
+        if (hasLookedOnce == false & distance>=2)
         {
             targetRotation = Quaternion.LookRotation(TargetToAttack.transform.position - transform.position);
 
@@ -187,9 +229,9 @@ public class to_origin : MonoBehaviour
               ///  hasLookedOnce = true;
                 //RunAway();
                 ///lookTowardsTarget = false;
-            }else{
-                hasLookedOnce = true;
-                if (timeRemaining-4 > 0)
+        } else {
+            hasLookedOnce = true;
+                /*if (timeRemaining-4 > 0)
 		    {
             timeRemaining -= Time.deltaTime;
 		    }else{
@@ -198,14 +240,15 @@ public class to_origin : MonoBehaviour
                 lookbackwardsAndRun = true;
             }
                 
-                Debug.Log("FishDistance: " + distance);
+            Debug.Log("FishDistance: " + distance);
         }
-    
+   
             
+        */
         
 
-        lerpPercent = Mathf.MoveTowards(lerpPercent, 4f, Time.deltaTime * lerpSpeed);     
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lerpPercent);
+        //lerpPercent = Mathf.MoveTowards(lerpPercent, 4f, Time.deltaTime * lerpSpeed);     
+        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, lerpPercent);
         
 
         //Debug.Log(lerpPercent);

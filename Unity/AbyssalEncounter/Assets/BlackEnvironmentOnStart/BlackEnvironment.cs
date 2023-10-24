@@ -7,7 +7,7 @@ public class BlackEnvironment : MonoBehaviour
     
     void Update()
     {
-        if (watchedFlock.howManyAreFollowing >= 2 && !animationStarted)
+        if (watchedFlock.howManyAreFollowing >= 5 && !animationStarted)
         {
             animationStarted = true;
             GetComponent<Animator>().SetTrigger("fadeout");

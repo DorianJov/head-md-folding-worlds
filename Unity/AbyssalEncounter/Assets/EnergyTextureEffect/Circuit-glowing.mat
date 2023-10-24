@@ -36,7 +36,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 978334210672e4aac9e1d42082d22fc2, type: 3}
+        m_Texture: {fileID: 2800000, guid: b88a9b97148ed5441b35c55698a33758, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -56,7 +56,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 978334210672e4aac9e1d42082d22fc2, type: 3}
+        m_Texture: {fileID: 2800000, guid: b88a9b97148ed5441b35c55698a33758, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -97,9 +97,9 @@ Material:
     - _Animation: 0.79
     - _Blend: 0
     - _BumpScale: 1
-    - _CircleAnimation: 0.4
-    - _CircleIntensity: 0.299
-    - _CircleWidth: 0.255
+    - _CircleAnimation: 0.414
+    - _CircleIntensity: 0.32
+    - _CircleWidth: 0.351
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2

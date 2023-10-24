@@ -12,6 +12,9 @@ public class Flock : MonoBehaviour
     [SerializeField] private Vector3 spawnBounds;
     [SerializeField] private Transform spawnOrigin;
     
+     [Header("Feedback")]
+    [SerializeField] private GlowingCircuitEffect circuitEffect;
+
     [Header("Speed Setup")]
     [Range(0, 2)]
     [SerializeField] private float _minSpeed;
@@ -144,6 +147,7 @@ public class Flock : MonoBehaviour
                  howManyAreFollowing++;
             }
         }
+        circuitEffect.SetFishCount(howManyAreFollowing == 0 ? -1 : howManyAreFollowing);
         //Debug.Log("nb of shrimps following = " + howManyAreFollowing);
 
         
@@ -152,18 +156,18 @@ public class Flock : MonoBehaviour
         //Player has at least 2 shrimps. the others can spawn until 20 !
         if(doneChecking){
             timer += Time.deltaTime;
-                if (timer >= interval)
-                {   
-                    if(allUnits.Count<=22){
+            if (timer >= interval)
+            {   
+                if(allUnits.Count<=22){
                     GenerateUnits();           
-                    timer -= interval;
-                    }
-
-                    if(howManyAreFollowing>=20){
-                    GenerateUnits();           
-                    timer -= interval;
-                    }
+                    timer = 0;
                 }
+
+                if(howManyAreFollowing>=20){
+                    GenerateUnits();           
+                    timer = 0;
+                }
+            }
        }
 
         
