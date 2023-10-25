@@ -203,7 +203,7 @@ public class to_origin : MonoBehaviour
             break;
             case ChargeState.ATTACK:
                 float distanceParcourue = Vector3.Distance (transform.position, positionDebutAttack);
-                if (distanceParcourue >= 2.9f) {
+                if (distanceParcourue >= 2.9f ) {
                     chargeState = ChargeState.FUITE;
                     targetRotation = Quaternion.LookRotation(transform.right, Vector3.up);
                     Destroy(gameObject, 10f);

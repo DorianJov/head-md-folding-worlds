@@ -183,6 +183,11 @@ public class Flock : MonoBehaviour
         {
             allUnits[i].MoveUnit();
         }
+
+        if(howManyAreFollowing>=75){
+            EndingScene();
+        }
+
     }
 
     int count;
@@ -196,7 +201,7 @@ public class Flock : MonoBehaviour
         }
 
         count++;
-        Debug.Log("Counter value:" + count);
+        //Debug.Log("Counter value:" + count);
         /*allUnits = new FlockUnit[flockSize];
         for (int i = 0; i < flockSize; i++)
         {
@@ -295,5 +300,82 @@ public class Flock : MonoBehaviour
         var rot = Quaternion.Euler(angleX, angleY, 0f);
         var randomPosition = rot * vector;  // rotates the direction
         return randomPosition * length;
+    }
+
+    private void EndingScene(){
+
+        /*
+
+        //HowmanyShrimpAreFollowing => 75
+
+
+        ///////////////////////////////// Play Ending sounds: Scream of a giant shrimp (once) and Huge vibrating bass 
+
+        //GetSoundObject
+        GameObject FinalSound = GameObject.Find("FinalSound");
+
+        //Get Audios
+        AudioSource[] FinalSounds = FinalSound.GetComponents<AudioSource>();
+
+        //Play Huge scream
+        FinalSounds[1].Play();
+        //Play Vibration Huge Bass
+        FinalSounds[2].Play();
+
+        
+
+        /////////////////////////////////// Turn Everything Red
+
+        //Get the Global volume object which has post effects and the fog object
+        GameObject GlobalVolumePostEffect = GameObject.Find("Global Volume");
+        GameObject Fog = GameObject.Find("FogDarker");
+
+        //Get tint paramaters in Bloom Component and Fog 
+        Tint = GlobalVolumePostEffect.GetComponents<Bloom>().tint;
+        Fog.Emission.color = red;
+
+        //Set tint parameter to true
+        Tint.visible = true;
+        // Set the tint to red smoothly
+        tint.paramaters ++;
+
+
+        
+        
+        // Set Post effect. to be red.
+        // Set Fog to red.
+
+
+
+        ///////////////////////////////// Set Visible the Huge shrimps and make it move slowly upwards
+
+        //Get BigFinalShrimps
+        GameObject HugeShrimp = GameObject.Find("HugeShrimpFinal");
+
+        //Set the object to be "activated"/Visible
+        HugeShrimp.visible = true;
+
+        //Move it upwards
+        HugeShrimp.transform.position += transform.upwards * Time.deltaTime;
+
+
+        //////////////////////////////// After 6 seconds
+        
+        //if time is 6 sec blabla 
+        //do this
+
+        /////////////////////////////// Make it all dark with the title only "AbyssalEncounter" visible.
+        
+        //get All objects and set them non visbile ?
+
+
+        //Get the text object and set it to true.
+        GameObject FinalText = GameObject.Find("Title");
+
+        //Set it to visible
+        FinalText.visible = true;
+
+        */
+
     }
 }

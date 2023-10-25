@@ -84,14 +84,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20814754214480032, guid: 52576ca7a820f9545865bdbdd924cc84,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20814754214480032, guid: 52576ca7a820f9545865bdbdd924cc84,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 4110369d7169b1c49942341fec7de73f, type: 2}
+      objectReference: {fileID: 2100000, guid: 05ab8c47e41f713478781e486215cdd9, type: 2}
     - target: {fileID: 20814754214480032, guid: 52576ca7a820f9545865bdbdd924cc84,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 4110369d7169b1c49942341fec7de73f, type: 2}
+      objectReference: {fileID: 2100000, guid: 61eba0a530385ca4ab0ea09190c5a458, type: 2}
     - target: {fileID: 919132149155446097, guid: 52576ca7a820f9545865bdbdd924cc84,
         type: 3}
       propertyPath: m_Name
@@ -131,25 +136,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-7455215426112270153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793330655060248930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc9dd3a4764df754082eaca1eace2f8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FOVAngle: 200
-  smoothDamp: 1
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 64
-  directionsToCheckWhenAvoidingObstacles:
-  - {x: 1, y: 0, z: 0}
-  - {x: -1, y: 0, z: 0}
-  - {x: 0, y: 1, z: 0}
-  - {x: 0, y: -1, z: 0}
