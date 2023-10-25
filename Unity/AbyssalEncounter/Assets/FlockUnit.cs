@@ -18,9 +18,9 @@ public class FlockUnit : MonoBehaviour
 	private Vector3 currentObstacleAvoidanceVector;
 	private float speed;
 
-    private bool touched = false;
-    private bool checking = true;
-    private bool isAlive = true;
+	private bool touched = false;
+	private bool checking = true;
+	private bool isAlive = true;
 
 	public bool playIdleSound = true;
 
@@ -29,10 +29,10 @@ public class FlockUnit : MonoBehaviour
 	public Material crevetteMaterialTouching;
 
 
-    Vector3 goalPos = Vector3.zero;
+	Vector3 goalPos = Vector3.zero;
 
 	public bool amIFollowingPlayer = false;
-    
+
 
 	public Transform myTransform { get; set; }
 
@@ -48,123 +48,132 @@ public class FlockUnit : MonoBehaviour
 
 	public void InitializeSpeed(float speed)
 	{
-		this.speed = speed*-1;
+		this.speed = speed * -1;
 	}
 
-	
-	
+
+
 	bool glowingShrimp = false;
-    void OnTriggerEnter(Collider other)
-    {
+	void OnTriggerEnter(Collider other)
+	{
 
-        if (other.tag  == "Monstre" && isAlive) {
-            isAlive = false;
-            // In the List<>
-            assignedFlock.allUnits.Remove(this);
-            // in the heirachy
-            this.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false; // desactiver le visuel le temps de mourir
+		if (other.tag == "Monstre" && isAlive)
+		{
+			isAlive = false;
+			// In the List<>
+			assignedFlock.allUnits.Remove(this);
+			// in the heirachy
+			this.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false; // desactiver le visuel le temps de mourir
 
-            //Debug.Log("Make a noise!!!!!");
-            //this.gameObject.GetComponent<AudioSource>().Play();
-            AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
-            //if (sources.Length > 0) {
-                //sources[(int)UnityEngine.Random.Range(0,sources.Length)].Play();
-				sources[0].Play();
-            //}
-			
-            Destroy(this.gameObject, 5.0f); // le temps de audio
-        }
+			//Debug.Log("Make a noise!!!!!");
+			//this.gameObject.GetComponent<AudioSource>().Play();
+			AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
+			//if (sources.Length > 0) {
+			//sources[(int)UnityEngine.Random.Range(0,sources.Length)].Play();
+			sources[0].Play();
+			//}
+
+			Destroy(this.gameObject, 5.0f); // le temps de audio
+		}
 
 
-          if (other.tag  == "FollowMe" && !amIFollowingPlayer) {
-				
-				// Debug.Log("FollowMe!!!!!");
-				AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
-				sources[(int)UnityEngine.Random.Range(2,sources.Length)].Play();
-				
-				touched = true;
-				amIFollowingPlayer = true;
-				glowingShrimp = true;
-               this.gameObject.tag ="Shrimps";
-				
-			
+		if (other.tag == "FollowMe" && !amIFollowingPlayer)
+		{
 
-				
-		    
-    		    
-				
-			
-        }
+			// Debug.Log("FollowMe!!!!!");
+			AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
+			sources[(int)UnityEngine.Random.Range(2, sources.Length)].Play();
+
+			touched = true;
+			amIFollowingPlayer = true;
+			glowingShrimp = true;
+			this.gameObject.tag = "Shrimps";
+
+
+
+
+
+
+
+
+		}
 
 	}
-        
-			 
+
+
 	float timeRemaining = 0.15f;
-	 void makeMeGLOWfor(){
-		
+	void makeMeGLOWfor()
+	{
+
 		if (timeRemaining > 0)
 		{
-		this.gameObject.GetComponentInChildren<Renderer>().material = crevetteMaterialTouching;
-    	timeRemaining -= Time.deltaTime;
+			this.gameObject.GetComponentInChildren<Renderer>().material = crevetteMaterialTouching;
+			timeRemaining -= Time.deltaTime;
 		}
-		 else
+		else
 		{
-		timeRemaining  = 0;
-    	//Debug.Log("Time has run out!");
-		//Debug.Log("PROUUUUT");
-		this.gameObject.GetComponentInChildren<Renderer>().material = crevetteMaterialFollowing;
-		glowingShrimp = false;
+			timeRemaining = 0;
+			//Debug.Log("Time has run out!");
+			//Debug.Log("PROUUUUT");
+			this.gameObject.GetComponentInChildren<Renderer>().material = crevetteMaterialFollowing;
+			glowingShrimp = false;
 
-	 }
+		}
 
 
-    }
+	}
 
-	   
 
-    void start(){
+
+	void start()
+	{
 		//Material material = new Material(Shader.Find("Crevette"));
-        //material.SetColor("Color_C6F9B478", Color.blue);
+		//material.SetColor("Color_C6F9B478", Color.blue);
 		//this.gameObject.GetComponent<Renderer>().material = material;
 
 
-			
-		
-        goalPos = Flock.assignedBasicPos;
-        
-    }
 
-    bool hasRead =  false;
-	 
+
+		goalPos = Flock.assignedBasicPos;
+
+	}
+
+	bool hasRead = false;
+
 	public void MoveUnit()
-	{   
-        //read once
-        if(!hasRead){
-			if(!playIdleSound){
-			AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
-			sources[1].Stop();
+	{
+		//read once
+		if (!hasRead)
+		{
+			if (!playIdleSound)
+			{
+				AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
+				sources[1].Stop();
 			}
-        //Debug.Log("I AM BORN");
-		//Debug.Log("AM I Playing a sound ?" + playIdleSound);
-		//Debug.Log("AM I Playing a sound ?" + playIdleSound)
-        goalPos = Flock.assignedBasicPos;
-        hasRead = true;
-        }
+			//Debug.Log("I AM BORN");
+			//Debug.Log("AM I Playing a sound ?" + playIdleSound);
+			//Debug.Log("AM I Playing a sound ?" + playIdleSound)
+			goalPos = Flock.assignedBasicPos;
+			hasRead = true;
+		}
 
-		if(glowingShrimp){
-		   makeMeGLOWfor();
+		if (glowingShrimp)
+		{
+			makeMeGLOWfor();
 
 		}
-		if(assignedFlock.allUnits.Count == 2 & !touched){
+		if (assignedFlock.allUnits.Count == 2 & !touched)
+		{
 			goalPos = Flock.ExperienceStartPoint;
 		}
-         
-        ///if has touched makes the shrimps follows the users hand
-        if(touched){
-             goalPos = Flock.goalPos;
-        }
-        
-        /*
+
+		///if has touched makes the shrimps follows the users hand
+		if (touched)
+		{
+			goalPos = Flock.goalPos;
+		}
+
+		/*
         //if shrimps got hit by the fish destroy them and play sound
         if(fishHit){
             //destroy()
@@ -173,47 +182,51 @@ public class FlockUnit : MonoBehaviour
 		FindNeighbours();
 		CalculateSpeed();
 
-        
 
-        //Vector3 goalPos = Flock.goalPos;
+
+		//Vector3 goalPos = Flock.goalPos;
 
 		var cohesionVector = CalculateCohesionVector() * assignedFlock.cohesionWeight;
 		var avoidanceVector = CalculateAvoidanceVector() * assignedFlock.avoidanceWeight;
 		var aligementVector = CalculateAligementVector() * assignedFlock.aligementWeight;
 
 		//if(amIFollowingPlayer){}
-		 //boundsVector = CalculateBoundsVector() * 10;
-		 var boundsForceWhenFollowing = assignedFlock.boundsWeight;
+		//boundsVector = CalculateBoundsVector() * 10;
+		var boundsForceWhenFollowing = assignedFlock.boundsWeight;
 
-		 if(amIFollowingPlayer){
+		if (amIFollowingPlayer)
+		{
 			boundsForceWhenFollowing = 10;
-		 }
-		 var boundsVector = CalculateBoundsVector() * boundsForceWhenFollowing;
-		
+		}
+		var boundsVector = CalculateBoundsVector() * boundsForceWhenFollowing;
 
-			
-		
-        
-        //I NEEED PERFORMANCES
+
+
+
+
+		//I NEEED PERFORMANCES
 		//var obstacleVector = CalculateObstacleVector() * assignedFlock.obstacleWeight;
 
-        //var moveVector = cohesionVector + avoidanceVector + aligementVector + boundsVector + obstacleVector + goalPos;
+		//var moveVector = cohesionVector + avoidanceVector + aligementVector + boundsVector + obstacleVector + goalPos;
 
 		var moveVector = cohesionVector + avoidanceVector + aligementVector + boundsVector;
 		moveVector = Vector3.SmoothDamp(myTransform.forward, moveVector, ref currentVelocity, smoothDamp);
 
-		float distance = Vector3.Distance (transform.position, goalPos);
-		
+		float distance = Vector3.Distance(transform.position, goalPos);
 
-		if(amIFollowingPlayer || assignedFlock.allUnits.Count == 2 & !amIFollowingPlayer ){
-		moveVector = moveVector.normalized * speed * (distance * assignedFlock.distanceAdditionalSpeed);
-		}else{
+
+		if (amIFollowingPlayer || assignedFlock.allUnits.Count == 2 & !amIFollowingPlayer)
+		{
+			moveVector = moveVector.normalized * speed * (distance * assignedFlock.distanceAdditionalSpeed);
+		}
+		else
+		{
 
 			//Debug.Log("allunits: " + assignedFlock.allUnits.Count);
 			moveVector = moveVector.normalized * speed;
 		}
 
-		
+
 
 		if (moveVector == Vector3.zero)
 			moveVector = transform.forward;
@@ -222,7 +235,7 @@ public class FlockUnit : MonoBehaviour
 		myTransform.position += moveVector * Time.deltaTime;
 	}
 
-	
+
 
 	private void FindNeighbours()
 	{
@@ -230,14 +243,14 @@ public class FlockUnit : MonoBehaviour
 		avoidanceNeighbours.Clear();
 		aligementNeighbours.Clear();
 		var allUnits = assignedFlock.allUnits;
-        for (int i = 0; i < allUnits.Count; i++)
+		for (int i = 0; i < allUnits.Count; i++)
 		//for (int i = 0; i < allUnits.Length; i++)
 		{
 			var currentUnit = allUnits[i];
 			if (currentUnit != this)
 			{
 				float currentNeighbourDistanceSqr = Vector3.SqrMagnitude(currentUnit.myTransform.position - myTransform.position);
-				if(currentNeighbourDistanceSqr <= assignedFlock.cohesionDistance * assignedFlock.cohesionDistance)
+				if (currentNeighbourDistanceSqr <= assignedFlock.cohesionDistance * assignedFlock.cohesionDistance)
 				{
 					cohesionNeighbours.Add(currentUnit);
 				}
@@ -255,8 +268,8 @@ public class FlockUnit : MonoBehaviour
 
 	private void CalculateSpeed()
 	{
-	    //float distance = Vector3.Distance (this.gameObject.transform.position, goalPos);
-		
+		//float distance = Vector3.Distance (this.gameObject.transform.position, goalPos);
+
 		//distance = distance;
 		if (cohesionNeighbours.Count == 0)
 			return;
@@ -267,7 +280,7 @@ public class FlockUnit : MonoBehaviour
 		}
 
 		speed /= cohesionNeighbours.Count;// + distance ;
-		
+
 		//speed = Mathf.Clamp(speed, assignedFlock.minSpeed, assignedFlock.maxSpeed);
 		///speed = Mathf.Clamp(speed, assignedFlock.minSpeed, assignedFlock.maxSpeed);
 		speed = Mathf.Clamp(speed, assignedFlock.minSpeed, assignedFlock.maxSpeed);
@@ -334,36 +347,36 @@ public class FlockUnit : MonoBehaviour
 		avoidanceVector = avoidanceVector.normalized;
 		return avoidanceVector;
 	}
-	
+
 	private Vector3 CalculateBoundsVector()
 	{
 
-            /*
-          if(touched){
-             goalPos = Flock.goalPos;
-        }else{
-             goalPos = Flock.assignedBasicPos;
-        }
-        /*
-       // Vector3 goalPos = Flock.goalPos;
+		/*
+	  if(touched){
+		 goalPos = Flock.goalPos;
+	}else{
+		 goalPos = Flock.assignedBasicPos;
+	}
+	/*
+   // Vector3 goalPos = Flock.goalPos;
 
-         /*
-          if(!Touched){
-            Vector3 goalPos = Flock.goalPos;
-        }else{
-            Vector3 goalPos = Flock.assignedBasicPos;
-        }
+	 /*
+	  if(!Touched){
+		Vector3 goalPos = Flock.goalPos;
+	}else{
+		Vector3 goalPos = Flock.assignedBasicPos;
+	}
 
-       
 
-        /*
 
-        /*
-		var offsetToCenter = assignedFlock.transform.position - myTransform.position;
-		bool isNearCenter = (offsetToCenter.magnitude >= assignedFlock.boundsDistance * 0.9f);
-		return isNearCenter ? offsetToCenter.normalized : Vector3.zero;
-        */
-        var offsetToCenter = assignedFlock.transform.position + goalPos - myTransform.position;
+	/*
+
+	/*
+	var offsetToCenter = assignedFlock.transform.position - myTransform.position;
+	bool isNearCenter = (offsetToCenter.magnitude >= assignedFlock.boundsDistance * 0.9f);
+	return isNearCenter ? offsetToCenter.normalized : Vector3.zero;
+	*/
+		var offsetToCenter = assignedFlock.transform.position + goalPos - myTransform.position;
 		bool isNearCenter = (offsetToCenter.magnitude >= assignedFlock.boundsDistance * 0.9f);
 		return isNearCenter ? offsetToCenter.normalized : Vector3.zero;
 	}
@@ -385,10 +398,10 @@ public class FlockUnit : MonoBehaviour
 
 	private Vector3 FindBestDirectionToAvoidObstacle()
 	{
-		if(currentObstacleAvoidanceVector != Vector3.zero)
+		if (currentObstacleAvoidanceVector != Vector3.zero)
 		{
 			RaycastHit hit;
-			if(!Physics.Raycast(myTransform.position, myTransform.forward, out hit, assignedFlock.obstacleDistance, obstacleMask))
+			if (!Physics.Raycast(myTransform.position, myTransform.forward, out hit, assignedFlock.obstacleDistance, obstacleMask))
 			{
 				return currentObstacleAvoidanceVector;
 			}
@@ -400,11 +413,11 @@ public class FlockUnit : MonoBehaviour
 
 			RaycastHit hit;
 			var currentDirection = myTransform.TransformDirection(directionsToCheckWhenAvoidingObstacles[i].normalized);
-			if(Physics.Raycast(myTransform.position, currentDirection, out hit, assignedFlock.obstacleDistance, obstacleMask))
+			if (Physics.Raycast(myTransform.position, currentDirection, out hit, assignedFlock.obstacleDistance, obstacleMask))
 			{
 
 				float currentDistance = (hit.point - myTransform.position).sqrMagnitude;
-				if(currentDistance > maxDistance)
+				if (currentDistance > maxDistance)
 				{
 					maxDistance = currentDistance;
 					selectedDirection = currentDirection;

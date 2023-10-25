@@ -4,15 +4,15 @@ using UnityEngine;
 public class Flock : MonoBehaviour
 {
 
-    
+
 
     [Header("Spawn Setup")]
     [SerializeField] private FlockUnit flockUnitPrefab;
     [SerializeField] private int flockSize;
     [SerializeField] private Vector3 spawnBounds;
     [SerializeField] private Transform spawnOrigin;
-    
-     [Header("Feedback")]
+
+    [Header("Feedback")]
     [SerializeField] private GlowingCircuitEffect circuitEffect;
 
     [Header("Speed Setup")]
@@ -35,7 +35,7 @@ public class Flock : MonoBehaviour
     public static Vector3 assignedBasicPos = Vector3.zero;
 
     public static Vector3 ExperienceStartPoint = Vector3.zero;
-    
+
 
     [Header("Detection Distances")]
 
@@ -83,31 +83,31 @@ public class Flock : MonoBehaviour
     public float obstacleWeight { get { return _obstacleWeight; } }
 
     //public FlockUnit[] allUnits { get; set; }
-    
+
 
     public List<FlockUnit> allUnits;
 
-    
-    
+
+
     public booleanManager InsideBooleanManager;
 
     private void Start()
     {
 
         GameObject g = GameObject.Find("BooleanManager");
-		InsideBooleanManager = g.GetComponent<booleanManager> ();
+        InsideBooleanManager = g.GetComponent<booleanManager>();
 
         allUnits = new List<FlockUnit>();
         //allUnits = new FlockUnit[flockSize];
         GenerateUnits();
 
         // Finds the object the script "IGotBools" is attached to and assigns it to the gameobject called g.
-		//GameObject g = GameObject.FindGameObjectWithTag (BoolKeeper);
-		//assigns the script component "IGotBools" to the public variable of type "IGotBools" names boolBoy.
-		//InsideSpawnFishScript = g.GetComponent<BooleanHolder> ();
+        //GameObject g = GameObject.FindGameObjectWithTag (BoolKeeper);
+        //assigns the script component "IGotBools" to the public variable of type "IGotBools" names boolBoy.
+        //InsideSpawnFishScript = g.GetComponent<BooleanHolder> ();
 
-		// accesses the bool named "isOnFire" and changed it's value.
-		///InsideSpawnFishScript.isOnFire = false;
+        // accesses the bool named "isOnFire" and changed it's value.
+        ///InsideSpawnFishScript.isOnFire = false;
     }
 
     public int howManyAreFollowing = 0;
@@ -116,23 +116,27 @@ public class Flock : MonoBehaviour
     float timer;
     //int count = -1;
     bool doneChecking = false;
-    
 
-    
+
+
     private void Update()
-    {   
+    {
 
 
         //InsideBooleanManager.Atleast20ShrimpsFollowsPlayer
 
         //Spawn 2 shrimps
-        if(allUnits.Count == 0){
+        if (allUnits.Count == 0)
+        {
             GenerateUnits();
         }
         //Wait for player to touch the 2 first shrimps before generating others
-        if (!doneChecking) {
-            for(int i=0; i < allUnits.Count; i++) {
-                if (allUnits[i].amIFollowingPlayer) {
+        if (!doneChecking)
+        {
+            for (int i = 0; i < allUnits.Count; i++)
+            {
+                if (allUnits[i].amIFollowingPlayer)
+                {
                     //Debug.Log(allUnits[i].amIFollowingPlayer);
                     doneChecking = true;
                     break;
@@ -142,37 +146,42 @@ public class Flock : MonoBehaviour
 
         //Calculate how many shrimps the player have
         howManyAreFollowing = 0;
-        for(int i=0; i < allUnits.Count; i++) {
-            if (allUnits[i].amIFollowingPlayer) {
-                 howManyAreFollowing++;
+        for (int i = 0; i < allUnits.Count; i++)
+        {
+            if (allUnits[i].amIFollowingPlayer)
+            {
+                howManyAreFollowing++;
             }
         }
         circuitEffect.SetFishCount(howManyAreFollowing == 0 ? -1 : howManyAreFollowing);
         //Debug.Log("nb of shrimps following = " + howManyAreFollowing);
 
-        
-    
-    
+
+
+
         //Player has at least 2 shrimps. the others can spawn until 20 !
-        if(doneChecking){
+        if (doneChecking)
+        {
             timer += Time.deltaTime;
             if (timer >= interval)
-            {   
-                if(allUnits.Count<=22){
-                    GenerateUnits();           
+            {
+                if (allUnits.Count <= 22)
+                {
+                    GenerateUnits();
                     timer = 0;
                 }
 
-                if(howManyAreFollowing>=20){
-                    GenerateUnits();           
+                if (howManyAreFollowing >= 20)
+                {
+                    GenerateUnits();
                     timer = 0;
                 }
             }
-       }
+        }
 
-        
+
         goalPos = ObjectToFollow.transform.position;
-        
+
         ExperienceStartPoint = StartingPoint.transform.position;
         /*for (int i = 0; i < allUnits.Length; i++)
         {
@@ -184,7 +193,8 @@ public class Flock : MonoBehaviour
             allUnits[i].MoveUnit();
         }
 
-        if(howManyAreFollowing>=75){
+        if (howManyAreFollowing >= 75)
+        {
             EndingScene();
         }
 
@@ -195,7 +205,8 @@ public class Flock : MonoBehaviour
     {
 
 
-        if (allUnits.Count >= flockSize) {
+        if (allUnits.Count >= flockSize)
+        {
             Debug.Log("NO MORE SHRIMPS");
             return;
         }
@@ -213,14 +224,14 @@ public class Flock : MonoBehaviour
             allUnits[i].AssignFlock(this);
             allUnits[i].InitializeSpeed(UnityEngine.Random.Range(minSpeed, maxSpeed));
         }*/
-        
-        
+
+
         //count = count + 2;
-        
-        
+
+
         //spawn here 
-       //allUnits = new FlockUnit[flockSize];
-      
+        //allUnits = new FlockUnit[flockSize];
+
         var randomVector = UnityEngine.Random.insideUnitSphere;
         //randomVector = new Vector3(randomVector.x * spawnBounds.x, randomVector.y + 0.2f * spawnBounds.y, randomVector.z * spawnBounds.z);
         randomVector = new Vector3(randomVector.x * spawnBounds.x, randomVector.y + 0.35f * spawnBounds.y, randomVector.z * spawnBounds.z);
@@ -229,12 +240,15 @@ public class Flock : MonoBehaviour
         // Override of spawn position by Raphael
         randomVector = GetRandomVectorPosition();
         spawnPosition = spawnOrigin != null ? spawnOrigin.position + randomVector : transform.position + randomVector;
-        
+
         var rotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0);
 
-        if(doneChecking){
+        if (doneChecking)
+        {
             assignedBasicPos = spawnPosition;
-        }else{
+        }
+        else
+        {
             assignedBasicPos = StartingPoint.transform.position;
             spawnPosition = assignedBasicPos;
         }
@@ -251,19 +265,22 @@ public class Flock : MonoBehaviour
                 tempVariable.playIdleSound = true;
             }*/
 
-             if(count%3 == 0){
+            if (count % 3 == 0)
+            {
                 tempVariable.playIdleSound = true;
-            }else{
+            }
+            else
+            {
                 tempVariable.playIdleSound = false;
             }
 
             allUnits.Add(tempVariable);
         }
-           //assignedBasicPos = StartingPoint.transform.position;
+        //assignedBasicPos = StartingPoint.transform.position;
 
         Debug.Log(allUnits.Count);
-        
-          //spawn here 
+
+        //spawn here 
         //allUnits = new FlockUnit[flockSize];
         /*for (int i = 0; i < 3; i++)
         { count++;
@@ -282,7 +299,7 @@ public class Flock : MonoBehaviour
         */
 
     }
-    
+
     /// <summary>
     /// Gets a random position vector
     /// with a full range random rotation in Y
@@ -295,14 +312,15 @@ public class Flock : MonoBehaviour
         var angleY = Random.Range(0f, 360f);
         var angleX = Random.Range(-45f, 45f);
         var length = Random.Range(0.45f, 0.7f);
-        
+
         var vector = Vector3.forward;
         var rot = Quaternion.Euler(angleX, angleY, 0f);
         var randomPosition = rot * vector;  // rotates the direction
         return randomPosition * length;
     }
 
-    private void EndingScene(){
+    private void EndingScene()
+    {
 
         /*
 
