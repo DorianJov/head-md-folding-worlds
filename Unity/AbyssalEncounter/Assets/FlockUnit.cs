@@ -180,7 +180,7 @@ public class FlockUnit : MonoBehaviour
 			//touched = true;
 			amIFollowingPlayer = true;
 			StartCoroutine(MakeMeGlowCoroutine(0.15f));
-			moveVector = targetForward * speed * ((distance / 20) * assignedFlock.distanceAdditionalSpeed);
+			moveVector = targetForward * speed * ((distance / 30) * assignedFlock.distanceAdditionalSpeed);
 		}
 
 		if (moveVector == Vector3.zero)

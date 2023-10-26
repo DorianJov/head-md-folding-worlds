@@ -743,6 +743,7 @@ MonoBehaviour:
   allUnits: []
   InsideBooleanManager: {fileID: 0}
   HugeShrimp: {fileID: 841799575}
+  HugeShrimpRedLight: {fileID: 217763776}
   howManyAreFollowing: 0
   interval: 5
 --- !u!4 &262146847
@@ -5259,7 +5260,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2058156997
 MonoBehaviour:
   m_ObjectHideFlags: 0

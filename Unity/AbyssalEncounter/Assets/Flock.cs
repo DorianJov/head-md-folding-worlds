@@ -95,7 +95,7 @@ public class Flock : MonoBehaviour
     public GameObject HugeShrimp;
     GameObject GlobalVolumePostEffect;
 
-    GameObject HugeShrimpRedLight;
+    public GameObject HugeShrimpRedLight;
 
     GameObject Fog;
 
@@ -115,7 +115,7 @@ public class Flock : MonoBehaviour
         //HugeShrimp = GameObject.Find("HugeShrimpFinal");
 
         //Giant RedLight
-        HugeShrimpRedLight = GameObject.Find("HugeShrimpRedLight");
+        //HugeShrimpRedLight = GameObject.Find("HugeShrimpRedLight");
 
         // GlobalVolumePostEffect = GameObject.Find("Global Volume");
         Fog = GameObject.Find("Fog/Particles");
@@ -165,7 +165,10 @@ public class Flock : MonoBehaviour
 
     private void Update()
     {
-
+        if (endingSceneIsPlaying)
+        {
+            EndingScene();
+        }
         //EndingScene();
         //InsideBooleanManager.Atleast20ShrimpsFollowsPlayer
 
@@ -245,7 +248,7 @@ public class Flock : MonoBehaviour
 
         if (howManyAreFollowing >= 10)
         {
-            EndingScene();
+            endingSceneIsPlaying = true;
         }
 
     }
