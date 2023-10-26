@@ -92,7 +92,7 @@ public class Flock : MonoBehaviour
 
 
     public booleanManager InsideBooleanManager;
-    GameObject HugeShrimp;
+    public GameObject HugeShrimp;
     GameObject GlobalVolumePostEffect;
 
     GameObject HugeShrimpRedLight;
@@ -101,14 +101,18 @@ public class Flock : MonoBehaviour
 
     GameObject AllElements;
 
+    GameObject AllMovableElements;
+
     GameObject BlackScreen;
 
     GameObject Title;
 
+
+
     private void Start()
     {
         //Ending scene stuff
-        HugeShrimp = GameObject.Find("HugeShrimpFinal");
+        //HugeShrimp = GameObject.Find("HugeShrimpFinal");
 
         //Giant RedLight
         HugeShrimpRedLight = GameObject.Find("HugeShrimpRedLight");
@@ -118,6 +122,9 @@ public class Flock : MonoBehaviour
 
         //Elements to deactivate once is the end.
         AllElements = GameObject.Find("AllElements");
+
+        //Elements to move
+        AllMovableElements = GameObject.Find("AllMovableElements");
 
         //Blackscreen.
         BlackScreen = GameObject.Find("BlackScreen");
@@ -145,6 +152,8 @@ public class Flock : MonoBehaviour
         ///InsideSpawnFishScript.isOnFire = false;
     }
 
+
+
     public int howManyAreFollowing = 0;
 
     public float interval = 3;
@@ -157,7 +166,7 @@ public class Flock : MonoBehaviour
     private void Update()
     {
 
-        EndingScene();
+        //EndingScene();
         //InsideBooleanManager.Atleast20ShrimpsFollowsPlayer
 
         //Spawn 2 shrimps
@@ -234,7 +243,7 @@ public class Flock : MonoBehaviour
             allUnits[i].MoveUnit();
         }
 
-        if (howManyAreFollowing >= 75)
+        if (howManyAreFollowing >= 10)
         {
             EndingScene();
         }
@@ -394,26 +403,46 @@ public class Flock : MonoBehaviour
 
         
         */
+
+        //Make everything move:perlin noise
+        var Vibrationspeed = 10.0f;
+        var Vibrationintensity = 0.1f;
+        AllMovableElements.isStatic = false;
+
+        AllMovableElements.transform.position = Vibrationintensity * new Vector3(
+            Mathf.PerlinNoise(Vibrationspeed * Time.time, 1),
+            Mathf.PerlinNoise(Vibrationspeed * Time.time, 2),
+            Mathf.PerlinNoise(Vibrationspeed * Time.time, 3));
         /////////////////////////////////// Turn Everything Red
         //couln't have acces to global volume parameters, idk how to do.
         //Get the Global volume object which has post effects and the fog object
         var FogLight = Fog.GetComponentInChildren<UnityEngine.Light>();
+
         FogLight.color = Color.Lerp(color1, color0, timeCount);
         if (timeCount <= 1)
         {
-            timeCount = timeCount + timing / 5;
+            timeCount = timeCount + timing / 2;
         }
         else
         {
-            FogLight.intensity = Mathf.PingPong(Time.time, 200) / duration;
+            FogLight.intensity += timing * 10;
+            //FogLight.spotAngle -= timing;
         }
 
         ///////////////////////////////// Set Visible the Huge shrimps and make it move slowly upwards
         //Set the object to be "activated"/Visible
-        HugeShrimp.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+        HugeShrimp.SetActive(true);
+        //HugeShrimp.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+        //HugeShrimp.GetComponents<AudioSource>().play = true;
+
+        //AudioSource[] HugeShrimpSound = HugeShrimp.GetComponents<AudioSource>();
+        //HugeShrimpSound[0].play();
+
+
+
         //Move it upwards
 
-        HugeShrimp.transform.position += transform.up * timing;
+        HugeShrimp.transform.position += transform.up * timing * 2;
         /*
         */
         //////////////////////////////// After 6 seconds

@@ -23,6 +23,7 @@ public class FlockUnit : MonoBehaviour
 	private Vector3 currentObstacleAvoidanceVector;
 	private float speed;
 
+	private bool touched = false;
 	private bool checking = true;
 	private bool isAlive = true;
 
@@ -111,12 +112,9 @@ public class FlockUnit : MonoBehaviour
 		}
 
 		///if has touched makes the shrimps follows the users hand
-		if (touched)
-		{
-			goalPos = Flock.goalPos;
-		}
 
-		if (touched & Flock.endingSceneIsPlaying)
+
+		if (amIFollowingPlayer & Flock.endingSceneIsPlaying)
 		{
 			goalPos = Flock.EndingPos;
 		}
@@ -127,7 +125,7 @@ public class FlockUnit : MonoBehaviour
         }*/
 
 		///if the shrimps follows the users hand
-		if (amIFollowingPlayer)
+		if (amIFollowingPlayer & !Flock.endingSceneIsPlaying)
 		{
 			goalPos = Flock.goalPos;
 		}
@@ -179,7 +177,9 @@ public class FlockUnit : MonoBehaviour
 		}
 		else
 		{
-			touched = true;
+			//touched = true;
+			amIFollowingPlayer = true;
+			StartCoroutine(MakeMeGlowCoroutine(0.15f));
 			moveVector = targetForward * speed * ((distance / 20) * assignedFlock.distanceAdditionalSpeed);
 		}
 
