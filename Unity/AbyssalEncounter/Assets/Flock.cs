@@ -409,7 +409,7 @@ public class Flock : MonoBehaviour
 
         //Make everything move:perlin noise
         var Vibrationspeed = 10.0f;
-        var Vibrationintensity = 0.1f;
+        var Vibrationintensity = 0.3f;
         AllMovableElements.isStatic = false;
 
         AllMovableElements.transform.position = Vibrationintensity * new Vector3(
@@ -445,7 +445,7 @@ public class Flock : MonoBehaviour
 
         //Move it upwards
 
-        HugeShrimp.transform.position += transform.up * timing * 2;
+        HugeShrimp.transform.position += transform.up * timing;
         /*
         */
         //////////////////////////////// After 6 seconds
