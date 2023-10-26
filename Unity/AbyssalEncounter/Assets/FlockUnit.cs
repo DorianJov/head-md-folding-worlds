@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class FlockUnit : MonoBehaviour
 {
@@ -9,6 +9,11 @@ public class FlockUnit : MonoBehaviour
 	[SerializeField] private float smoothDamp;
 	[SerializeField] private LayerMask obstacleMask;
 	[SerializeField] private Vector3[] directionsToCheckWhenAvoidingObstacles;
+
+	[Header("Audio sources")]
+	[SerializeField] private AudioSource criCrevetteAudio;
+	[SerializeField] private AudioSource crevetteSwimAudio;
+	[SerializeField] private AudioSource[] CatchCrevetteAudioSources;
 
 	private List<FlockUnit> cohesionNeighbours = new List<FlockUnit>();
 	private List<FlockUnit> avoidanceNeighbours = new List<FlockUnit>();
@@ -18,7 +23,6 @@ public class FlockUnit : MonoBehaviour
 	private Vector3 currentObstacleAvoidanceVector;
 	private float speed;
 
-	private bool touched = false;
 	private bool checking = true;
 	private bool isAlive = true;
 
@@ -41,6 +45,14 @@ public class FlockUnit : MonoBehaviour
 		myTransform = transform;
 	}
 
+	void Start()
+	{
+		//Material material = new Material(Shader.Find("Crevette"));
+		//material.SetColor("Color_C6F9B478", Color.blue);
+		//this.gameObject.GetComponent<Renderer>().material = material;
+		goalPos = Flock.assignedBasicPos;
+	}
+
 	public void AssignFlock(Flock flock)
 	{
 		assignedFlock = flock;
@@ -51,118 +63,49 @@ public class FlockUnit : MonoBehaviour
 		this.speed = speed * -1;
 	}
 
-
-
-	bool glowingShrimp = false;
 	void OnTriggerEnter(Collider other)
 	{
-
-		if (other.tag == "Monstre" && isAlive)
+		if (other.CompareTag("Monstre") && isAlive)
 		{
 			isAlive = false;
 			// In the List<>
 			assignedFlock.allUnits.Remove(this);
 			// in the heirachy
-			this.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false; // desactiver le visuel le temps de mourir
+			gameObject.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false; // desactiver le visuel le temps de mourir
 
 			//Debug.Log("Make a noise!!!!!");
-			//this.gameObject.GetComponent<AudioSource>().Play();
-			AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
-			//if (sources.Length > 0) {
-			//sources[(int)UnityEngine.Random.Range(0,sources.Length)].Play();
-			sources[0].Play();
-			//}
+			criCrevetteAudio.Play();
 
-			Destroy(this.gameObject, 5.0f); // le temps de audio
+			Destroy(gameObject, criCrevetteAudio.clip.length); // le temps de audio
 		}
 
-
-		if (other.tag == "FollowMe" && !amIFollowingPlayer)
+		if (other.CompareTag("FollowMe") && !amIFollowingPlayer)
 		{
 
 			// Debug.Log("FollowMe!!!!!");
-			AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
-			sources[(int)UnityEngine.Random.Range(2, sources.Length)].Play();
+			CatchCrevetteAudioSources[Random.Range(0, CatchCrevetteAudioSources.Length)].Play();
+			crevetteSwimAudio.Stop();   // seules les vagabondes bruissent
 
-			touched = true;
 			amIFollowingPlayer = true;
-			glowingShrimp = true;
-			this.gameObject.tag = "Shrimps";
-
-
-
-
-
-
-
-
+			var glowDuration = 0.15f;
+			StartCoroutine(MakeMeGlowCoroutine(glowDuration));
+			gameObject.tag = "Shrimps";
 		}
-
 	}
 
-
-	float timeRemaining = 0.15f;
-	void makeMeGLOWfor()
+	IEnumerator MakeMeGlowCoroutine(float duration)
 	{
-
-		if (timeRemaining > 0)
-		{
-			this.gameObject.GetComponentInChildren<Renderer>().material = crevetteMaterialTouching;
-			timeRemaining -= Time.deltaTime;
-		}
-		else
-		{
-			timeRemaining = 0;
-			//Debug.Log("Time has run out!");
-			//Debug.Log("PROUUUUT");
-			this.gameObject.GetComponentInChildren<Renderer>().material = crevetteMaterialFollowing;
-			glowingShrimp = false;
-
-		}
-
-
+		var childRenderer = gameObject.GetComponentInChildren<Renderer>();
+		childRenderer.material = crevetteMaterialTouching;
+		yield return new WaitForSeconds(duration);
+		childRenderer.material = crevetteMaterialFollowing;
 	}
 
 
-
-	void start()
-	{
-		//Material material = new Material(Shader.Find("Crevette"));
-		//material.SetColor("Color_C6F9B478", Color.blue);
-		//this.gameObject.GetComponent<Renderer>().material = material;
-
-
-
-
-		goalPos = Flock.assignedBasicPos;
-
-	}
-
-	bool hasRead = false;
 
 	public void MoveUnit()
 	{
-		//read once
-		if (!hasRead)
-		{
-			if (!playIdleSound)
-			{
-				AudioSource[] sources = this.gameObject.GetComponents<AudioSource>();
-				sources[1].Stop();
-			}
-			//Debug.Log("I AM BORN");
-			//Debug.Log("AM I Playing a sound ?" + playIdleSound);
-			//Debug.Log("AM I Playing a sound ?" + playIdleSound)
-			goalPos = Flock.assignedBasicPos;
-			hasRead = true;
-		}
-
-		if (glowingShrimp)
-		{
-			makeMeGLOWfor();
-
-		}
-		if (assignedFlock.allUnits.Count == 2 & !touched)
+		if (assignedFlock.allUnits.Count == 2 && !amIFollowingPlayer)
 		{
 			goalPos = Flock.ExperienceStartPoint;
 		}
@@ -183,12 +126,14 @@ public class FlockUnit : MonoBehaviour
             //destroy()
         }*/
 
+		///if the shrimps follows the users hand
+		if (amIFollowingPlayer)
+		{
+			goalPos = Flock.goalPos;
+		}
+
 		FindNeighbours();
 		CalculateSpeed();
-
-
-
-		//Vector3 goalPos = Flock.goalPos;
 
 		var cohesionVector = CalculateCohesionVector() * assignedFlock.cohesionWeight;
 		var avoidanceVector = CalculateAvoidanceVector() * assignedFlock.avoidanceWeight;
@@ -205,9 +150,6 @@ public class FlockUnit : MonoBehaviour
 		var boundsVector = CalculateBoundsVector() * boundsForceWhenFollowing;
 
 
-
-
-
 		//I NEEED PERFORMANCES
 		//var obstacleVector = CalculateObstacleVector() * assignedFlock.obstacleWeight;
 
@@ -217,7 +159,7 @@ public class FlockUnit : MonoBehaviour
 		moveVector = Vector3.SmoothDamp(myTransform.forward, moveVector, ref currentVelocity, smoothDamp);
 
 		float distance = Vector3.Distance(transform.position, goalPos);
-
+		Vector3 targetForward = moveVector.normalized;
 
 		if (!Flock.endingSceneIsPlaying)
 		{
@@ -225,32 +167,28 @@ public class FlockUnit : MonoBehaviour
 
 			if (amIFollowingPlayer || assignedFlock.allUnits.Count == 2 & !amIFollowingPlayer)
 			{
-				moveVector = moveVector.normalized * speed * (distance * assignedFlock.distanceAdditionalSpeed);
+				moveVector = targetForward * speed * (distance * assignedFlock.distanceAdditionalSpeed);
 			}
 			else
 			{
 
 				//Debug.Log("allunits: " + assignedFlock.allUnits.Count);
-				moveVector = moveVector.normalized * speed;
+				moveVector = targetForward * speed;
 			}
 
 		}
 		else
 		{
 			touched = true;
-			moveVector = moveVector.normalized * speed * ((distance / 20) * assignedFlock.distanceAdditionalSpeed);
+			moveVector = targetForward * speed * ((distance / 20) * assignedFlock.distanceAdditionalSpeed);
 		}
-
-
 
 		if (moveVector == Vector3.zero)
 			moveVector = transform.forward;
 
-		myTransform.forward = moveVector;
+		myTransform.forward = targetForward;
 		myTransform.position += moveVector * Time.deltaTime;
 	}
-
-
 
 	private void FindNeighbours()
 	{
