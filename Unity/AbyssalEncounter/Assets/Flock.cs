@@ -34,6 +34,8 @@ public class Flock : MonoBehaviour
     public static Vector3 goalPos = Vector3.zero;
     public static Vector3 assignedBasicPos = Vector3.zero;
 
+    public static Vector3 EndingPos = Vector3.zero;
+
     public static Vector3 ExperienceStartPoint = Vector3.zero;
 
 
@@ -90,12 +92,45 @@ public class Flock : MonoBehaviour
 
 
     public booleanManager InsideBooleanManager;
+    GameObject HugeShrimp;
+    GameObject GlobalVolumePostEffect;
+
+    GameObject HugeShrimpRedLight;
+
+    GameObject Fog;
+
+    GameObject AllElements;
+
+    GameObject BlackScreen;
+
+    GameObject Title;
 
     private void Start()
     {
+        //Ending scene stuff
+        HugeShrimp = GameObject.Find("HugeShrimpFinal");
 
-        GameObject g = GameObject.Find("BooleanManager");
-        InsideBooleanManager = g.GetComponent<booleanManager>();
+        //Giant RedLight
+        HugeShrimpRedLight = GameObject.Find("HugeShrimpRedLight");
+
+        // GlobalVolumePostEffect = GameObject.Find("Global Volume");
+        Fog = GameObject.Find("Fog/Particles");
+
+        //Elements to deactivate once is the end.
+        AllElements = GameObject.Find("AllElements");
+
+        //Blackscreen.
+        BlackScreen = GameObject.Find("BlackScreen");
+
+        //Title
+        Title = GameObject.Find("Title");
+
+
+
+
+        //Not used stuff
+        //GameObject g = GameObject.Find("BooleanManager");
+        //InsideBooleanManager = g.GetComponent<booleanManager>();
 
         allUnits = new List<FlockUnit>();
         //allUnits = new FlockUnit[flockSize];
@@ -122,7 +157,7 @@ public class Flock : MonoBehaviour
     private void Update()
     {
 
-
+        EndingScene();
         //InsideBooleanManager.Atleast20ShrimpsFollowsPlayer
 
         //Spawn 2 shrimps
@@ -183,6 +218,12 @@ public class Flock : MonoBehaviour
         goalPos = ObjectToFollow.transform.position;
 
         ExperienceStartPoint = StartingPoint.transform.position;
+
+        if (endingSceneIsPlaying)
+        {
+            EndingPos = HugeShrimpRedLight.transform.position;
+
+        }
         /*for (int i = 0; i < allUnits.Length; i++)
         {
             allUnits[i].MoveUnit();
@@ -319,9 +360,20 @@ public class Flock : MonoBehaviour
         return randomPosition * length;
     }
 
+    float duration = 0.1f;
+    Color color0 = Color.red;
+    Color color1 = Color.blue;
+    private float timeCount = 0.0f;
+
+    private float coloranimvar = 0.0f;
+    public static bool endingSceneIsPlaying = false;
+
+    float countdown = 15;
+
     private void EndingScene()
     {
-
+        endingSceneIsPlaying = true;
+        float timing = Time.deltaTime;
         /*
 
         //HowmanyShrimpAreFollowing => 75
@@ -341,59 +393,52 @@ public class Flock : MonoBehaviour
         FinalSounds[2].Play();
 
         
-
+        */
         /////////////////////////////////// Turn Everything Red
-
+        //couln't have acces to global volume parameters, idk how to do.
         //Get the Global volume object which has post effects and the fog object
-        GameObject GlobalVolumePostEffect = GameObject.Find("Global Volume");
-        GameObject Fog = GameObject.Find("FogDarker");
-
-        //Get tint paramaters in Bloom Component and Fog 
-        Tint = GlobalVolumePostEffect.GetComponents<Bloom>().tint;
-        Fog.Emission.color = red;
-
-        //Set tint parameter to true
-        Tint.visible = true;
-        // Set the tint to red smoothly
-        tint.paramaters ++;
-
-
-        
-        
-        // Set Post effect. to be red.
-        // Set Fog to red.
-
-
+        var FogLight = Fog.GetComponentInChildren<UnityEngine.Light>();
+        FogLight.color = Color.Lerp(color1, color0, timeCount);
+        if (timeCount <= 1)
+        {
+            timeCount = timeCount + timing / 5;
+        }
+        else
+        {
+            FogLight.intensity = Mathf.PingPong(Time.time, 200) / duration;
+        }
 
         ///////////////////////////////// Set Visible the Huge shrimps and make it move slowly upwards
-
-        //Get BigFinalShrimps
-        GameObject HugeShrimp = GameObject.Find("HugeShrimpFinal");
-
         //Set the object to be "activated"/Visible
-        HugeShrimp.visible = true;
-
+        HugeShrimp.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
         //Move it upwards
-        HugeShrimp.transform.position += transform.upwards * Time.deltaTime;
 
-
-        //////////////////////////////// After 6 seconds
-        
-        //if time is 6 sec blabla 
-        //do this
-
-        /////////////////////////////// Make it all dark with the title only "AbyssalEncounter" visible.
-        
-        //get All objects and set them non visbile ?
-
-
-        //Get the text object and set it to true.
-        GameObject FinalText = GameObject.Find("Title");
-
-        //Set it to visible
-        FinalText.visible = true;
-
+        HugeShrimp.transform.position += transform.up * timing;
+        /*
         */
+        //////////////////////////////// After 6 seconds
+        /////////////////////////////// Make it all dark with the title only "AbyssalEncounter" visible.
+        countdown -= timing;
+        if (countdown < 0)
+        {
+
+            //find gameobject Allelements and setActive = false;
+            //find gameobject BlackScreen and meshrenderer = true;
+            // find gameObject Title and setActive = true;
+            //GameObject FinalText = GameObject.Find("Title");
+
+            AllElements.SetActive(false);
+
+            //Blackscreen.
+            BlackScreen.GetComponent<MeshRenderer>().enabled = true;
+
+            //Title
+            Title.GetComponent<MeshRenderer>().enabled = true;
+
+
+        }
+
 
     }
+
 }

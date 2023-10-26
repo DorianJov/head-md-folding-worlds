@@ -173,6 +173,10 @@ public class FlockUnit : MonoBehaviour
 			goalPos = Flock.goalPos;
 		}
 
+		if (touched & Flock.endingSceneIsPlaying)
+		{
+			goalPos = Flock.EndingPos;
+		}
 		/*
         //if shrimps got hit by the fish destroy them and play sound
         if(fishHit){
@@ -215,15 +219,26 @@ public class FlockUnit : MonoBehaviour
 		float distance = Vector3.Distance(transform.position, goalPos);
 
 
-		if (amIFollowingPlayer || assignedFlock.allUnits.Count == 2 & !amIFollowingPlayer)
+		if (!Flock.endingSceneIsPlaying)
 		{
-			moveVector = moveVector.normalized * speed * (distance * assignedFlock.distanceAdditionalSpeed);
+
+
+			if (amIFollowingPlayer || assignedFlock.allUnits.Count == 2 & !amIFollowingPlayer)
+			{
+				moveVector = moveVector.normalized * speed * (distance * assignedFlock.distanceAdditionalSpeed);
+			}
+			else
+			{
+
+				//Debug.Log("allunits: " + assignedFlock.allUnits.Count);
+				moveVector = moveVector.normalized * speed;
+			}
+
 		}
 		else
 		{
-
-			//Debug.Log("allunits: " + assignedFlock.allUnits.Count);
-			moveVector = moveVector.normalized * speed;
+			touched = true;
+			moveVector = moveVector.normalized * speed * ((distance / 20) * assignedFlock.distanceAdditionalSpeed);
 		}
 
 
