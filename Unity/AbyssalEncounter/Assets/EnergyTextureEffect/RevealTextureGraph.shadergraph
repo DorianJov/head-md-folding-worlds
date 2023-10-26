@@ -495,20 +495,6 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
-                    "m_Id": "5296bb2976244e63a954e16b5336e52e"
-                },
-                "m_SlotId": 7
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "2747a5a523ee4e899abeaba4ccc33651"
-                },
-                "m_SlotId": 0
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
                     "m_Id": "54ed320a13e140d2be76e052556c51e1"
                 },
                 "m_SlotId": 0
@@ -614,6 +600,20 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "6252266527d64032ac2f8b1ba27dc81e"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "7c2aa1fceabd405faa96cbc5db7dabe0"
+                },
+                "m_SlotId": 7
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "2747a5a523ee4e899abeaba4ccc33651"
                 },
                 "m_SlotId": 0
             }
@@ -3890,8 +3890,8 @@
     "m_AlphaMode": 0,
     "m_RenderFace": 2,
     "m_AlphaClip": true,
-    "m_CastShadows": true,
-    "m_ReceiveShadows": true,
+    "m_CastShadows": false,
+    "m_ReceiveShadows": false,
     "m_CustomEditorGUI": "",
     "m_SupportVFX": false
 }
