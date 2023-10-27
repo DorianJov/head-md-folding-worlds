@@ -250,7 +250,7 @@ public class Flock : MonoBehaviour
         }
 
         // go here only once.
-        if (howManyAreFollowing >= 10 && !endingSceneIsPlaying)
+        if (howManyAreFollowing >= 75 && !endingSceneIsPlaying)
         {
             endingSceneIsPlaying = true;
             // do the ending setup here.
@@ -388,7 +388,7 @@ public class Flock : MonoBehaviour
     public bool titleScreenIsOn;
 
     float endingSceneTimeBeforeTitle = 15;
-    
+
     float Vibrationspeed = 10.0f;
     float Vibrationintensity = 0.3f;
 
@@ -396,9 +396,9 @@ public class Flock : MonoBehaviour
     {
         //Set the object to be "activated"/Visible
         HugeShrimp.SetActive(true);
-        
+
     }
-    
+
     private void EndingSceneUpdate()
     {
         /*
@@ -440,11 +440,11 @@ public class Flock : MonoBehaviour
         }
 
         ///////////////////////////////// Set Visible the Huge shrimps and make it move slowly upwards
-        
+
 
         //Move it upwards
         HugeShrimp.transform.position += transform.up * deltaTime;
-        
+
         //////////////////////////////// After 6 seconds
         /////////////////////////////// Make it all dark with the title only "AbyssalEncounter" visible.
         endingSceneTimeBeforeTitle -= deltaTime;
@@ -486,14 +486,14 @@ public class Flock : MonoBehaviour
         {
             var time = 0f;
             var duration = 5f;
-            
+
             var tmp = Title.GetComponent<TextMeshPro>();
             var startColor = Color.clear;
             var endColor = Color.white;
             tmp.color = startColor;
-            
+
             Title.GetComponent<MeshRenderer>().enabled = true;
-            
+
             while (time < 1f)
             {
                 time += Time.deltaTime / duration;

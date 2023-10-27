@@ -75,6 +75,11 @@ public class to_origin : MonoBehaviour
         {
             // SoundEnvironementReplay();
         }
+
+        if (flock.howManyAreFollowing >= 75)
+        {
+            Destroy(this.gameObject, 1.0f);
+        }
     }
 
     IEnumerator moveFromToCoroutine(Vector3 start, Vector3 end, float time)
