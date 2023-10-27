@@ -3,14 +3,21 @@ using UnityEngine;
 public class BlackEnvironment : MonoBehaviour
 {
     [SerializeField] private Flock watchedFlock;
-    private bool animationStarted;
+    private bool fadedOut;  // we start with a black screen, and fade it out after some shrimps
+    private bool fadedBackIn;   // fade the black screen at the end for the title
     
     void Update()
     {
-        if (watchedFlock.howManyAreFollowing >= 5 && !animationStarted)
+        if (!fadedOut && watchedFlock.howManyAreFollowing >= 5)
         {
-            animationStarted = true;
+            fadedOut = true;
             GetComponent<Animator>().SetTrigger("fadeout");
+        }
+
+        if (!fadedBackIn && watchedFlock.titleScreenIsOn)
+        {
+            fadedBackIn = true;
+            GetComponent<Animator>().SetTrigger("fadein");
         }
     }
 }

@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Flock : MonoBehaviour
@@ -167,7 +169,7 @@ public class Flock : MonoBehaviour
     {
         if (endingSceneIsPlaying)
         {
-            EndingScene();
+            EndingSceneUpdate();
         }
         //EndingScene();
         //InsideBooleanManager.Atleast20ShrimpsFollowsPlayer
@@ -207,7 +209,8 @@ public class Flock : MonoBehaviour
 
 
         //Player has at least 2 shrimps. the others can spawn until 20 !
-        if (doneChecking)
+        // Stop spawning when ending scene is playing
+        if (doneChecking && !endingSceneIsPlaying)
         {
             timer += Time.deltaTime;
             if (timer >= interval)
@@ -246,9 +249,12 @@ public class Flock : MonoBehaviour
             allUnits[i].MoveUnit();
         }
 
-        if (howManyAreFollowing >= 10)
+        // go here only once.
+        if (howManyAreFollowing >= 10 && !endingSceneIsPlaying)
         {
             endingSceneIsPlaying = true;
+            // do the ending setup here.
+            EndingSceneSetup();
         }
 
     }
@@ -379,18 +385,24 @@ public class Flock : MonoBehaviour
 
     private float coloranimvar = 0.0f;
     public bool endingSceneIsPlaying = false;
+    public bool titleScreenIsOn;
 
-    float countdown = 15;
+    float endingSceneTimeBeforeTitle = 15;
+    
+    float Vibrationspeed = 10.0f;
+    float Vibrationintensity = 0.3f;
 
-    private void EndingScene()
+    private void EndingSceneSetup()
     {
-        endingSceneIsPlaying = true;
-        float timing = Time.deltaTime;
+        //Set the object to be "activated"/Visible
+        HugeShrimp.SetActive(true);
+        
+    }
+    
+    private void EndingSceneUpdate()
+    {
         /*
-
-        //HowmanyShrimpAreFollowing => 75
-
-
+        // HowmanyShrimpAreFollowing => 75
         ///////////////////////////////// Play Ending sounds: Scream of a giant shrimp (once) and Huge vibrating bass 
 
         //GetSoundObject
@@ -403,15 +415,9 @@ public class Flock : MonoBehaviour
         FinalSounds[1].Play();
         //Play Vibration Huge Bass
         FinalSounds[2].Play();
-
-        
         */
 
         //Make everything move:perlin noise
-        var Vibrationspeed = 10.0f;
-        var Vibrationintensity = 0.3f;
-        // AllMovableElements.isStatic = false;
-
         AllMovableElements.transform.position = Vibrationintensity * new Vector3(
             Mathf.PerlinNoise(Vibrationspeed * Time.time, 1),
             Mathf.PerlinNoise(Vibrationspeed * Time.time, 2),
@@ -419,58 +425,83 @@ public class Flock : MonoBehaviour
         /////////////////////////////////// Turn Everything Red
         //couln't have acces to global volume parameters, idk how to do.
         //Get the Global volume object which has post effects and the fog object
-        var FogLight = Fog.GetComponentInChildren<UnityEngine.Light>();
+        var FogLight = Fog.GetComponentInChildren<Light>();
 
         FogLight.color = Color.Lerp(color1, color0, timeCount);
+        var deltaTime = Time.deltaTime;
         if (timeCount <= 1)
         {
-            timeCount = timeCount + timing / 2;
+            timeCount += deltaTime / 2;
         }
         else
         {
-            FogLight.intensity += timing * 10;
+            FogLight.intensity += deltaTime * 10;
             //FogLight.spotAngle -= timing;
         }
 
         ///////////////////////////////// Set Visible the Huge shrimps and make it move slowly upwards
-        //Set the object to be "activated"/Visible
-        HugeShrimp.SetActive(true);
-        //HugeShrimp.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
-        //HugeShrimp.GetComponents<AudioSource>().play = true;
-
-        //AudioSource[] HugeShrimpSound = HugeShrimp.GetComponents<AudioSource>();
-        //HugeShrimpSound[0].play();
-
-
+        
 
         //Move it upwards
-
-        HugeShrimp.transform.position += transform.up * timing;
-        /*
-        */
+        HugeShrimp.transform.position += transform.up * deltaTime;
+        
         //////////////////////////////// After 6 seconds
         /////////////////////////////// Make it all dark with the title only "AbyssalEncounter" visible.
-        countdown -= timing;
-        if (countdown < 0)
+        endingSceneTimeBeforeTitle -= deltaTime;
+        if (endingSceneTimeBeforeTitle < 0 && !titleScreenIsOn)
         {
-
+            // we get here only once
+            titleScreenIsOn = true;
+            StartCoroutine(FadeOutHugeCrevetteAudio());
+            StartCoroutine(FadeInTitle());
             //find gameobject Allelements and setActive = false;
             //find gameobject BlackScreen and meshrenderer = true;
             // find gameObject Title and setActive = true;
             //GameObject FinalText = GameObject.Find("Title");
 
-            AllElements.SetActive(false);
+            // AllElements.SetActive(false);
 
             //Blackscreen.
-            BlackScreen.GetComponent<MeshRenderer>().enabled = true;
+            // BlackScreen.GetComponent<MeshRenderer>().enabled = true;
 
             //Title
-            Title.GetComponent<MeshRenderer>().enabled = true;
-
-
+            // Title.GetComponent<MeshRenderer>().enabled = true;
         }
 
+        IEnumerator FadeOutHugeCrevetteAudio()
+        {
+            var time = 1f;
+            var duration = 7f;
+            var audio = HugeShrimp.GetComponent<AudioSource>();
+            while (time >= 0)
+            {
+                audio.volume = time;
+                time -= Time.deltaTime / duration;
+                yield return null;
+            }
+            audio.volume = 0;
+        }
 
+        IEnumerator FadeInTitle()
+        {
+            var time = 0f;
+            var duration = 5f;
+            
+            var tmp = Title.GetComponent<TextMeshPro>();
+            var startColor = Color.clear;
+            var endColor = Color.white;
+            tmp.color = startColor;
+            
+            Title.GetComponent<MeshRenderer>().enabled = true;
+            
+            while (time < 1f)
+            {
+                time += Time.deltaTime / duration;
+                tmp.color = Color.Lerp(startColor, endColor, time);
+                yield return null;
+            }
+            tmp.color = endColor;
+        }
     }
 
 }
