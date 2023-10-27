@@ -23,7 +23,6 @@ public class FlockUnit : MonoBehaviour
 	private Vector3 currentObstacleAvoidanceVector;
 	private float speed;
 
-	private bool touched = false;
 	private bool checking = true;
 	private bool isAlive = true;
 
@@ -46,17 +45,11 @@ public class FlockUnit : MonoBehaviour
 		myTransform = transform;
 	}
 
-	void Start()
-	{
-		//Material material = new Material(Shader.Find("Crevette"));
-		//material.SetColor("Color_C6F9B478", Color.blue);
-		//this.gameObject.GetComponent<Renderer>().material = material;
-		goalPos = Flock.assignedBasicPos;
-	}
-
+	// This is assigned immediately after instantiation. Consider this as Start()
 	public void AssignFlock(Flock flock)
 	{
 		assignedFlock = flock;
+		goalPos = assignedFlock.assignedBasicPos;
 	}
 
 	public void InitializeSpeed(float speed)
@@ -108,15 +101,13 @@ public class FlockUnit : MonoBehaviour
 	{
 		if (assignedFlock.allUnits.Count == 2 && !amIFollowingPlayer)
 		{
-			goalPos = Flock.ExperienceStartPoint;
+			goalPos = assignedFlock.ExperienceStartPoint;
 		}
 
-		///if has touched makes the shrimps follows the users hand
-
-
-		if (amIFollowingPlayer & Flock.endingSceneIsPlaying)
+		// if has touched makes the shrimps follows the users hand
+		if (amIFollowingPlayer && assignedFlock.endingSceneIsPlaying)
 		{
-			goalPos = Flock.EndingPos;
+			goalPos = assignedFlock.EndingPos;
 		}
 		/*
         //if shrimps got hit by the fish destroy them and play sound
@@ -125,9 +116,9 @@ public class FlockUnit : MonoBehaviour
         }*/
 
 		///if the shrimps follows the users hand
-		if (amIFollowingPlayer & !Flock.endingSceneIsPlaying)
+		if (amIFollowingPlayer && !assignedFlock.endingSceneIsPlaying)
 		{
-			goalPos = Flock.goalPos;
+			goalPos = assignedFlock.goalPos;
 		}
 
 		FindNeighbours();
@@ -159,7 +150,7 @@ public class FlockUnit : MonoBehaviour
 		float distance = Vector3.Distance(transform.position, goalPos);
 		Vector3 targetForward = moveVector.normalized;
 
-		if (!Flock.endingSceneIsPlaying)
+		if (!assignedFlock.endingSceneIsPlaying)
 		{
 
 
@@ -177,7 +168,6 @@ public class FlockUnit : MonoBehaviour
 		}
 		else
 		{
-			//touched = true;
 			amIFollowingPlayer = true;
 			StartCoroutine(MakeMeGlowCoroutine(0.15f));
 			moveVector = targetForward * speed * ((distance / 30) * assignedFlock.distanceAdditionalSpeed);
@@ -303,25 +293,6 @@ public class FlockUnit : MonoBehaviour
 
 	private Vector3 CalculateBoundsVector()
 	{
-
-		/*
-	  if(touched){
-		 goalPos = Flock.goalPos;
-	}else{
-		 goalPos = Flock.assignedBasicPos;
-	}
-	/*
-   // Vector3 goalPos = Flock.goalPos;
-
-	 /*
-	  if(!Touched){
-		Vector3 goalPos = Flock.goalPos;
-	}else{
-		Vector3 goalPos = Flock.assignedBasicPos;
-	}
-
-
-
 	/*
 
 	/*

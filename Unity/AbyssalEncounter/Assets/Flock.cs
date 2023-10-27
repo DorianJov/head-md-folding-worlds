@@ -31,12 +31,12 @@ public class Flock : MonoBehaviour
     [Header("StartingPoint")]
     public GameObject StartingPoint;
 
-    public static Vector3 goalPos = Vector3.zero;
-    public static Vector3 assignedBasicPos = Vector3.zero;
+    public Vector3 goalPos = Vector3.zero;
+    public Vector3 assignedBasicPos = Vector3.zero;
 
-    public static Vector3 EndingPos = Vector3.zero;
+    public Vector3 EndingPos = Vector3.zero;
 
-    public static Vector3 ExperienceStartPoint = Vector3.zero;
+    public Vector3 ExperienceStartPoint = Vector3.zero;
 
 
     [Header("Detection Distances")]
@@ -378,7 +378,7 @@ public class Flock : MonoBehaviour
     private float timeCount = 0.0f;
 
     private float coloranimvar = 0.0f;
-    public static bool endingSceneIsPlaying = false;
+    public bool endingSceneIsPlaying = false;
 
     float countdown = 15;
 
@@ -410,7 +410,7 @@ public class Flock : MonoBehaviour
         //Make everything move:perlin noise
         var Vibrationspeed = 10.0f;
         var Vibrationintensity = 0.3f;
-        AllMovableElements.isStatic = false;
+        // AllMovableElements.isStatic = false;
 
         AllMovableElements.transform.position = Vibrationintensity * new Vector3(
             Mathf.PerlinNoise(Vibrationspeed * Time.time, 1),
