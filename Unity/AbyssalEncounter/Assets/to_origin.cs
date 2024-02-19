@@ -211,7 +211,7 @@ public class to_origin : MonoBehaviour
             case ChargeState.TETE_CHERCHEUSE:
                 float distance = Vector3.Distance(transform.position, TargetToAttack.transform.position);
                 targetRotation = Quaternion.LookRotation(TargetToAttack.transform.position - transform.position);
-                if (distance <= 2)
+                if (distance <= 4)
                 {
                     chargeState = ChargeState.ATTACK;
                     positionDebutAttack = transform.position;
@@ -219,7 +219,7 @@ public class to_origin : MonoBehaviour
                 break;
             case ChargeState.ATTACK:
                 float distanceParcourue = Vector3.Distance(transform.position, positionDebutAttack);
-                if (distanceParcourue >= 2.9f)
+                if (distanceParcourue >= 4.9f)
                 {
                     chargeState = ChargeState.FUITE;
                     targetRotation = Quaternion.LookRotation(transform.right, Vector3.up);
